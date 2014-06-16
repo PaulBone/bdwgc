@@ -1,16 +1,20 @@
 # Ignored files in bdwgc Git repo.
 
 # Binary files (in root dir, cord, tests):
+*.a
 *.dll
 *.exe
 *.gcda
 *.gch
 *.gcno
+*.ilk
 *.la
 *.lib
+*.dylib
 *.lo
 *.o
 *.obj
+*.so
 
 .dirstamp
 /*.gc.log
@@ -49,6 +53,8 @@
 /leaktest
 /libtool
 /middletest
+/on_sparc_sunos5
+/on_sparc_sunos5_so
 /realloc_test
 /setjmp_test
 /smashtest
