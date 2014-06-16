@@ -69,6 +69,11 @@ GC_bool         GC_mercury_calc_gc_time = 0;
 unsigned long 	GC_total_gc_time = 0;
 			   /* Measured in milliseconds.         */
 
+void (*GC_mercury_callback_start_collect)(void) = NULL;
+void (*GC_mercury_callback_stop_collect)(void) = NULL;
+void (*GC_mercury_callback_pause_thread)(void) = NULL;
+void (*GC_mercury_callback_resume_thread)(void) = NULL;
+
 #ifndef GC_DISABLE_INCREMENTAL
   GC_INNER int GC_incremental = 0;      /* By default, stop the world.  */
 #endif
@@ -490,6 +495,9 @@ GC_INNER GC_bool GC_try_to_collect_inner(GC_stop_func stop_func)
         GC_save_callers(GC_last_stack);
 #   endif
     GC_is_full_gc = TRUE;
+    if (GC_mercury_callback_start_collect) {
+      GC_mercury_callback_start_collect();
+    }
     if (!GC_stopped_mark(stop_func)) {
       if (!GC_incremental) {
         /* We're partially done and have no way to complete or use      */
@@ -515,6 +523,9 @@ GC_INNER GC_bool GC_try_to_collect_inner(GC_stop_func stop_func)
         if (GC_mercury_calc_gc_time) {
             GC_total_gc_time += cur_gc_time;
         }
+    }
+    if (GC_mercury_callback_stop_collect) {
+      GC_mercury_callback_stop_collect();
     }
 #   endif
     if (GC_on_collection_event)

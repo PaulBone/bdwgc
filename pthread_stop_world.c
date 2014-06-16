@@ -214,6 +214,9 @@ STATIC void GC_suspend_handler_inner(ptr_t dummy, void *context);
 #endif
 {
   int old_errno = errno;
+  if (GC_mercury_callback_pause_thread) {
+    GC_mercury_callback_pause_thread();
+  }
 
   if (sig != GC_sig_suspend) {
 #   if defined(GC_FREEBSD_THREADS)
@@ -235,6 +238,10 @@ STATIC void GC_suspend_handler_inner(ptr_t dummy, void *context);
       GC_suspend_handler_inner(NULL, context);
     }
 # endif
+
+  if (GC_mercury_callback_resume_thread) {
+    GC_mercury_callback_resume_thread();
+  }
   errno = old_errno;
 }
 
