@@ -13,6 +13,14 @@
  * modified is included with the above copyright notice.
  */
 
+/*
+ * We (the Mercury group) have made the following changes:
+ * -- deleted a debugging call to MessageBoxA,
+ *    as a hacky work-around to avoid needing to link in
+ *    the Windows libraries.
+ * -fjh.
+ */
+
 #include "private/gc_pmark.h"
 
 #include <stdio.h>
@@ -801,20 +809,7 @@ GC_INNER GC_bool GC_is_initialized = FALSE;
   STATIC void GC_win32_MessageBoxA(const char *msg, const char *caption,
                                    unsigned flags)
   {
-#   ifndef DONT_USE_USER32_DLL
-      /* Use static binding to "user32.dll".    */
-      (void)MessageBoxA(NULL, msg, caption, flags);
-#   else
-      /* This simplifies linking - resolve "MessageBoxA" at run-time. */
-      HINSTANCE hU32 = LoadLibrary(TEXT("user32.dll"));
-      if (hU32) {
-        FARPROC pfn = GetProcAddress(hU32, "MessageBoxA");
-        if (pfn)
-          (void)(*(int (WINAPI *)(HWND, LPCSTR, LPCSTR, UINT))pfn)(
-                              NULL /* hWnd */, msg, caption, flags);
-        (void)FreeLibrary(hU32);
-      }
-#   endif
+      DebugBreak();
   }
 #endif /* MSWIN32 */
 

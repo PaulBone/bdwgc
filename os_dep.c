@@ -13,6 +13,8 @@
  * provided the above notices are retained, and a notice that the code was
  * modified is included with the above copyright notice.
  */
+/* Boehm, March 8, 1996 12:00 pm PST */
+/* I added the work-around for SIG_FILL on gnu-win32 (Cygwin).  -fjh. */
 
 #include "private/gc_priv.h"
 
