@@ -90,21 +90,15 @@ AO_SRC_DIR=$(srcdir)/libatomic_ops
 # -pthread -DGC_OSF1_THREADS
 
 # Mercury-specific CFLAGS:
+# We need $(CFLAGS_FOR_PIC) because we might be building a shared library.
 CFLAGS= -I$(srcdir)/include -I$(AO_SRC_DIR)/src \
 	-DNO_EXECUTE_PERMISSION \
 	$(BOEHM_CFLAGS) $(CFLAGS_FOR_PIC) $(DLL_CFLAGS) $(EXTRA_CFLAGS)
-
-ifeq ($(findstring par,$(GRADE)),par)
-CFLAGS += $(BOEHM_CFLAGS_FOR_THREADS)
-MAYBE_THREAD_LIBS = $(THREAD_LIBS)
-endif
 
 # If we are in the gcd grade then don't define -DNO_DEBUGGING
 ifneq ($(findstring gcd,$(GRADE)),gcd)
 CFLAGS += -DNO_DEBUGGING
 endif
-
-# We need $(CFLAGS_FOR_PIC) because we might be building a shared library.
 
 # HOSTCC and HOSTCFLAGS are used to build executables that will be run as
 # part of the build process, i.e. on the build machine.  These will usually
@@ -112,12 +106,21 @@ endif
 # Note that HOSTCFLAGS should include any -D flags that affect thread support.
 #
 # Mercury-specific: we set HOSTCC in Mmake.common
-# CFLAGS_FOR_THREADS is NOT expanded into HOSTCFLAGS but that only affects
-# threadlibs.c; we use our THREAD_LIBS variable instead.
+# Mercury-specific: flags affecting thread support are NOT included in
+# HOSTCFLAGS (despite the comment above) as that breaks cross-compilation if
+# gc.h includes platform-specific headers that do not exist on the host.
+# threadlibs will not work but we use our THREAD_LIBS variable instead.
+#
 ifndef HOSTCC
 HOSTCC=$(CC)
 endif
-HOSTCFLAGS=$(CFLAGS)
+HOSTCFLAGS:=$(CFLAGS)
+
+# Mercury-specific: add flags for thread support to CFLAGS but not HOSTCFLAGS.
+ifeq ($(findstring par,$(GRADE)),par)
+CFLAGS += $(BOEHM_CFLAGS_FOR_THREADS)
+MAYBE_THREAD_LIBS = $(THREAD_LIBS)
+endif
 
 # For dynamic library builds, it may be necessary to add flags to generate
 # PIC code, e.g. -fPIC on Linux.
