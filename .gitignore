@@ -79,7 +79,6 @@ config.h.in~
 stamp-h1
 
 # External library (without trailing slash to allow symlinks):
-/libatomic_ops*
 /libatomic_ops-install
 /pthreads-w32*
 
