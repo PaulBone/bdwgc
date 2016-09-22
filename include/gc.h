@@ -44,6 +44,7 @@
         /* the latter.                                                  */
 
 #include "gc_config_macros.h"
+#include <stdio.h>
 
 #ifdef __cplusplus
   extern "C" {
@@ -1766,6 +1767,11 @@ GC_API void GC_CALL GC_register_has_static_roots_callback(
 /* getter are unsynchronized.                                           */
 GC_API void GC_CALL GC_set_force_unmap_on_gcollect(int);
 GC_API int GC_CALL GC_get_force_unmap_on_gcollect(void);
+
+/* Print out the elements of GC_size_map to the given file.
+ * This provides a mapping from requested allocation size to actual
+ * allocation size (in words) */
+GC_API void GC_CALL GC_mercury_write_size_map(FILE *fp);
 
 /* Fully portable code should call GC_INIT() from the main program      */
 /* before making any other GC_ calls.  On most platforms this is a      */
