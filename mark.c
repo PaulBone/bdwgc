@@ -596,6 +596,10 @@ GC_INNER mse * GC_signal_mark_stack_overflow(mse *msp)
  * encoding, we optionally maintain a cache for the block address to
  * header mapping, we prefetch when an object is "grayed", etc.
  */
+/* Mercury-specific: */
+#ifdef __SANITIZE_ADDRESS__
+__attribute__((no_sanitize_address))
+#endif
 GC_INNER mse * GC_mark_from(mse *mark_stack_top, mse *mark_stack,
                             mse *mark_stack_limit)
 {
@@ -1518,6 +1522,10 @@ void GC_print_trace(word gc_no)
  * and scans the entire region immediately, in case the contents
  * change.
  */
+/* Mercury-specific: */
+#ifdef __SANITIZE_ADDRESS__
+__attribute__((no_sanitize_address))
+#endif
 GC_API void GC_CALL GC_push_all_eager(char *bottom, char *top)
 {
     word * b = (word *)(((word) bottom + ALIGNMENT-1) & ~(ALIGNMENT-1));
