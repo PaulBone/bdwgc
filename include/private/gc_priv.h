@@ -2079,7 +2079,7 @@ void GC_print_block_list(void);
 void GC_print_hblkfreelist(void);
 void GC_print_heap_sects(void);
 void GC_print_static_roots(void);
-/* void GC_dump(void); - declared in gc.h */
+/* void GC_dump(const char *label); - declared in gc.h */
 
 extern word GC_fo_entries; /* should be visible in extra/MacOS.c */
 
@@ -2373,11 +2373,12 @@ GC_INNER ptr_t GC_store_debug_info(ptr_t p, word sz, const char *str,
 #ifndef NO_DEBUGGING
   GC_EXTERN GC_bool GC_dump_regularly;
                                 /* Generate regular debugging dumps.    */
-# define COND_DUMP if (EXPECT(GC_dump_regularly, FALSE)) GC_dump(); \
+# define COND_DUMP if (EXPECT(GC_dump_regularly, FALSE)) GC_dump(NULL); \
                         else COND_DUMP_CHECKS
 #else
 # define COND_DUMP COND_DUMP_CHECKS
 #endif
+GC_EXTERN unsigned long GC_init_time;
 
 #if defined(PARALLEL_MARK)
   /* We need additional synchronization facilities from the thread      */

@@ -68,6 +68,8 @@ GC_bool         GC_mercury_calc_gc_time = 0;
 			   /* GC_total_gc_time if set to true.  */
 unsigned long 	GC_total_gc_time = 0;
 			   /* Measured in milliseconds.         */
+unsigned long   GC_init_time;
+                           /* The time that the GC was initialised. */
 
 void (*GC_mercury_callback_start_collect)(void) = NULL;
 void (*GC_mercury_callback_stop_collect)(void) = NULL;

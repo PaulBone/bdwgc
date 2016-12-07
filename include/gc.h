@@ -1549,7 +1549,9 @@ GC_API void * GC_CALL GC_is_valid_displacement(void * /* p */);
 /* debugger, or by setting the GC_DUMP_REGULARLY environment variable,  */
 /* but it may be useful to call it from client code during debugging.   */
 /* Defined only if the library has been compiled without NO_DEBUGGING.  */
-GC_API void GC_CALL GC_dump(void);
+/* label may be a string to be used to help identifiy individual dumps, */
+/* if label is NULL the current GC number will be used.                 */
+GC_API void GC_CALL GC_dump(const char *label);
 
 /* Safer, but slow, pointer addition.  Probably useful mainly with      */
 /* a preprocessor.  Useful only for heap pointers.                      */
